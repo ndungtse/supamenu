@@ -8,26 +8,58 @@ generator client {
   provider = "prisma-client-js"
 }
 
+// food ordering app
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+  id          String   @id @default(cuid()) @map("_id")
+  email       String   @unique
+  fullName    String
+  phoneNumber String
+  password    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  orders      Order[]
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  viewCount Int      @default(0)
-  author    User?    @relation(fields: [authorId], references: [id])
-  authorId  Int?
+model Item {
+  id                     String   @id @default(uuid())
+  name                   String
+  priceInCents           Int
+  filePath               String
+  imagePath              String
+  description            String
+  isAvailableForPurchase Boolean  @default(true)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  // downloadVerifications  DownloadVerification[]
+  // Order                  Order?   @relation(fields: [orderId], references: [id])
+  // orderId                String?
+  Order                  Order[]
+}
+
+model Order {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  items      Item[]
+  totalPrice Float
+  status     Status
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Status {
+  PENDING
+  CONFIRMED
+  DELIVERED
+  CANCELLED
 }

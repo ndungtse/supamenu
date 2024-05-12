@@ -15,8 +15,8 @@ const doc = {
   produces: ["application/json"],
   tags: [
     {
-      name: "User",
-      description: "Endpoints",
+      name: "Auth",
+      description: "Authentication routes",
     },
   ],
   securityDefinitions: {
@@ -28,33 +28,6 @@ const doc = {
     },
   },
   definitions: {
-    Parents: {
-      father: "Simon Doe",
-      mother: "Marie Doe",
-    },
-    User: {
-      name: "Jhon Doe",
-      age: 29,
-      parents: {
-        $ref: "#/definitions/Parents",
-      },
-      diplomas: [
-        {
-          school: "XYZ University",
-          year: 2020,
-          completed: true,
-          internship: {
-            hours: 290,
-            location: "XYZ Company",
-          },
-        },
-      ],
-    },
-    AddUser: {
-      $name: "Jhon Doe",
-      $age: 29,
-      about: "",
-    },
   },
 };
 
