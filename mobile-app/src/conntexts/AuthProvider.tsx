@@ -93,6 +93,7 @@ export function AuthProvider(props: AuthProviderProps) {
     }, [token]);
 
     useEffect(() => {
+        console.log("segments", segments);
         if (!ready) return;
         const inAuthGroup = segments[0] === "(auth)";
         const isLanding = segments[0] === "landing";
