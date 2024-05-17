@@ -1,52 +1,57 @@
-import { Image, StyleSheet, Platform } from 'react-native';
-
-import { HelloWave } from '@/components/core/HelloWave';
-import ParallaxScrollView from '@/components/core/ParallaxScrollView';
+import { products, restaurants } from '@/assets/data';
+import GridView from '@/components/core/GridView';
 import { ThemedText } from '@/components/core/ThemedText';
 import { ThemedView } from '@/components/core/ThemedView';
+import Product from '@/components/in_screens/Product';
+import Restaurant from '@/components/in_screens/Restaurant';
+import { Colors } from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { FontAwesome5 } from '@expo/vector-icons';
+import React from 'react';
+import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
 
 export default function HomeScreen() {
+  const [query, setQuery] = React.useState('');
+  const colorScheme = useColorScheme()
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+    <ThemedView className='flex-1'>
+      <View className=" mt-2 mx-auto w-full p-3 rounded-md items-center flex-row px-5 gap-x-3">
+        <FontAwesome5 name="search" size={20} color="gray" />
+        {/* <MulishText className="text-black/70">Search</MulishText> */}
+        <TextInput
+          placeholder="Search nearest coffee"
+          className="flex-1"
+          placeholderTextColor="gray"
+          value={query}
+          onChangeText={setQuery}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({ ios: 'cmd + d', android: 'cmd + m' })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      </View>
+      <ScrollView className="p-3">
+        <View className="flex-row items-center">
+          <FontAwesome5 name="hotjar" size={20} color={Colors[colorScheme].icon} />
+          <ThemedText className="text-lg font-bold ml-2">Popular Restaurants</ThemedText>
+        </View>
+        <View className='flex-1 flex-col'>
+          {restaurants.map((item) => (
+            <Restaurant restaurant={item} key={item.id} />
+          ))}
+        </View>
+        <View className='flex-1 flex-col'>
+          <View className="flex-row mt-3 items-center">
+            <FontAwesome5 name="hotjar" size={20} color={Colors[colorScheme].icon} />
+            <ThemedText className="text-lg font-bold ml-2">Popular Products</ThemedText>
+          </View>
+          <GridView
+            data={products}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={(item) => (
+              <Product item={item} />
+            )}
+          />
+        </View>
+      </ScrollView>
+    </ThemedView>
   );
 }
 
