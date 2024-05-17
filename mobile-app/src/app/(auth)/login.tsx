@@ -1,18 +1,30 @@
+import ParallaxScrollView from '@/components/core/ParallaxScrollView';
+import { useAuth } from '@/conntexts/AuthProvider';
+import { Colors } from '@/constants/Colors';
+import useStorage from '@/hooks/useStorage';
 import { AntDesign, Feather, FontAwesome } from '@expo/vector-icons';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import React from 'react';
-import { Pressable, Text, TextInput, View } from 'react-native';
+import { Pressable, Text, TextInput, View, ScrollView } from 'react-native';
 
 const LoginScreen = () => {
   const [data, setData] = React.useState({
     email: '',
     password: '',
   });
+  const { storeData } = useStorage()
+  const { setToken } = useAuth();
+  const router = useRouter()
 
-  const onLogin = async() => {}
+  const onLogin = async () => {
+    storeData('token', '123456')
+    setToken('123456')
+    router.push('/(tabs)')
+  }
 
   return (
-    <View className=' bg-primary flex-1'>
+    <ScrollView
+      className=' bg-primary flex-1'>
       <View className=' bg-white rounded-t-[30px] p-6 px-3 mt-20 flex-1'>
         <View className='flex flex-row items-center justify-center'>
           <Text className=' text-4xl font-bold'>Supa</Text>
@@ -23,15 +35,15 @@ const LoginScreen = () => {
         <View className='mt-8 flex-row items-center border-2 border-gray-300 p-1 rounded-md'>
           <Feather name="mail" size={28} color="gray" />
           <TextInput onChangeText={(text) => setData({ ...data, email: text })}
-            className=' w-full mt-1 h-9 text-lg pl-2' placeholder='Your Email' />
+            className=' w-full outline-none h-9 text-lg pl-2' placeholder='Your Email' />
         </View>
         <View className='mt-4 flex-row items-center border-2 border-gray-300 p-1 rounded-md'>
           <Feather name="lock" size={28} color="gray" />
           <TextInput onChangeText={(text) => setData({ ...data, password: text })}
-            className=' w-full mt-1 h-9 text-lg pl-2' placeholder='Your Password' />
+            className=' w-full outline-none h-9 text-lg pl-2' placeholder='Your Password' />
         </View>
         <Pressable
-          onPress={() => console.log(data)}
+          onPress={onLogin}
           className='bg-primary w-full flex-row  items-center justify-center mt-6 p-3 px-8 rounded-md'>
           <Text className='text-white text-lg font-bold'>Sign in</Text>
         </Pressable>
@@ -56,7 +68,7 @@ const LoginScreen = () => {
         <Link href='/forgot-password' className='text-center mt-4 text-primary font-semibold'>Forgot Password?</Link>
         <Text className='text-center mt-4 text-gray-400'>Don't have an account? <Link href={'/register'} className='text-primary font-bold'>Sign up</Link></Text>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 

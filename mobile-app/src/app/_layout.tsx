@@ -4,15 +4,20 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-import "./style.css"
+import "./style.css";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import AppSplashScreen from '@/components/shared/AppSplashScreen';
 import { AuthProvider } from '@/conntexts/AuthProvider';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { NativeWindStyleSheet } from 'nativewind';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+NativeWindStyleSheet.setOutput({
+  default: "native",
+});
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -39,6 +44,7 @@ export default function RootLayout() {
             flex: 1,
             // backgroundColor: colorScheme === 'dark' ? DarkTheme.colors.background : DefaultTheme.colors.background,
           }}
+          edges={[]}
         >
           <Stack screenOptions={{ headerShown: false }} initialRouteName='index'>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

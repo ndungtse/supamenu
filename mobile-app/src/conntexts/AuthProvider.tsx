@@ -95,11 +95,11 @@ export function AuthProvider(props: AuthProviderProps) {
     useEffect(() => {
         console.log("segments", segments);
         if (!ready) return;
-        const inAuthGroup = segments[0] === "(auth)";
+        const inAuthGroup = segments[0] === "(auth)" || segments.length === 0;
         const isLanding = segments[0] === "landing";
 
         // segments length is 0 when on the landing page. ot '/'
-        if (segments.length === 0) return;
+        // if (segments.length === 0) return;
         if (isLanding) return;
 
         if (
@@ -107,11 +107,12 @@ export function AuthProvider(props: AuthProviderProps) {
             !token &&
             !inAuthGroup
         ) {
-            console.log("segments", segments);
+            console.log("has tkn segments", segments);
             // Redirect to the login page. For more info see https://github.com/expo/router/issues/740
             replace("/login");
         } else if (token && inAuthGroup) {
             // Redirect away from the login page.
+            console.log("tabs", segments);
             replace("/(tabs)");
         }
     }, [token, segments, ready]);

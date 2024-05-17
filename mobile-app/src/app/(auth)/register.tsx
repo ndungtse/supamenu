@@ -2,6 +2,7 @@ import { View, Text, TextInput, Pressable } from 'react-native'
 import React from 'react'
 import { AntDesign, Feather, FontAwesome } from '@expo/vector-icons'
 import { Link } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const RegisterScreen = () => {
     const [data, setData] = React.useState({
@@ -11,6 +12,7 @@ const RegisterScreen = () => {
         password: '',
     });
     return (
+
         <View className=' bg-primary flex-1'>
             <View className=' bg-white rounded-t-[30px] p-6 px-3 mt-20 flex-1'>
                 <View className='flex flex-row items-center justify-center'>
@@ -22,22 +24,22 @@ const RegisterScreen = () => {
                 <View className='mt-8 flex-row items-center border-2 border-gray-300 p-1 rounded-md'>
                     <Feather name="user" size={28} color="gray" />
                     <TextInput onChangeText={(text) => setData({ ...data, fullNames: text })}
-                        className=' w-full mt-1 h-9 text-lg pl-2' placeholder='Your Full Names' />
+                        className=' w-full h-9 text-lg pl-2' placeholder='Your Full Names' />
                 </View>
                 <View className='mt-4 flex-row items-center border-2 border-gray-300 p-1 rounded-md'>
                     <Feather name="phone" size={28} color="gray" />
                     <TextInput onChangeText={(text) => setData({ ...data, phoneNumber: text })}
-                        className=' w-full mt-1 h-9 text-lg pl-2' placeholder='Your Phone Number' />
+                        className=' w-full h-9 text-lg pl-2' placeholder='Your Phone Number' />
                 </View>
                 <View className='mt-8 flex-row items-center border-2 border-gray-300 p-1 rounded-md'>
                     <Feather name="mail" size={28} color="gray" />
                     <TextInput onChangeText={(text) => setData({ ...data, email: text })}
-                        className=' w-full mt-1 h-9 text-lg pl-2' placeholder='Your Email' />
+                        className=' w-full h-9 text-lg pl-2' placeholder='Your Email' />
                 </View>
                 <View className='mt-4 flex-row items-center border-2 border-gray-300 p-1 rounded-md'>
                     <Feather name="lock" size={28} color="gray" />
                     <TextInput onChangeText={(text) => setData({ ...data, password: text })}
-                        className=' w-full mt-1 h-9 text-lg pl-2' placeholder='Your Password' />
+                        className=' w-full h-9 text-lg pl-2' placeholder='Your Password' />
                 </View>
                 <Pressable
                     onPress={() => console.log(data)}
