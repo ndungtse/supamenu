@@ -6,7 +6,6 @@ import Product from '@/components/in_screens/Product';
 import Restaurant from '@/components/in_screens/Restaurant';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import useStorage from '@/hooks/useStorage';
 import { FontAwesome5 } from '@expo/vector-icons';
 import React from 'react';
 import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
