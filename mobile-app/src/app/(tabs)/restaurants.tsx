@@ -7,7 +7,7 @@ import { Colors } from '@/constants/Colors'
 import useColorScheme from '@/hooks/useColorScheme'
 import { cn } from '@/utils/cn'
 import { FontAwesome5 } from '@expo/vector-icons'
-import { useRouter } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import React from 'react'
 import { Pressable, ScrollView, TextInput, View } from 'react-native'
 
@@ -23,7 +23,7 @@ const Restaurants = () => {
   // },[])
   return (
     <View className='flex-1'>
-      <View className="flex px-2 pb-1 flex-row justify-between items-center">
+      <View className="flex p-2 pb-1 flex-row justify-between items-center">
         <Pressable
           onPress={() => router.back()}
           className="flex w-9 h-9 rounded-full justify-center items-center flex-col p-2 border border-primary"
