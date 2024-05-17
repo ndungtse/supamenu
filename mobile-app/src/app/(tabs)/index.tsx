@@ -6,6 +6,7 @@ import Product from '@/components/in_screens/Product';
 import Restaurant from '@/components/in_screens/Restaurant';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import useStorage from '@/hooks/useStorage';
 import { FontAwesome5 } from '@expo/vector-icons';
 import React from 'react';
 import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
@@ -13,7 +14,8 @@ import { ScrollView, StyleSheet, TextInput, View } from 'react-native';
 export default function HomeScreen() {
   const [query, setQuery] = React.useState('');
   const colorScheme = useColorScheme()
-
+  // const { removeData } = useStorage()
+  // removeData('token')
   return (
     <ThemedView className='flex-1'>
       <View className=" mt-2 mx-auto w-full p-3 rounded-md items-center flex-row px-5 gap-x-3">
