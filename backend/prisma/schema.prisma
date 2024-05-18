@@ -15,17 +15,18 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(cuid())
-  email       String   @unique
-  fullName    String
-  phoneNumber String
-  password    String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  orders      Order[]
-  Cart        Cart[]
-  role        Role     @default(USER)
-  verified    Boolean  @default(false)
+  id                String   @id @default(cuid())
+  email             String   @unique
+  fullName          String
+  phoneNumber       String
+  password          String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  orders            Order[]
+  cart              Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  cartId            String   @unique
+  role              Role     @default(USER)
+  verified          Boolean  @default(false)
   verificationToken String?
 
   @@map("users")
@@ -35,7 +36,8 @@ model Item {
   id                     String      @id @default(uuid())
   name                   String
   priceInRwf             Int
-  filePath               String
+  price                  Float
+  image                  String
   imagePath              String
   description            String
   isAvailableForPurchase Boolean     @default(true)
@@ -46,12 +48,12 @@ model Item {
   // Order                  Order?   @relation(fields: [orderId], references: [id])
   // orderId                String?
   Order                  Order[]
-  Cart                   Cart?       @relation(fields: [cartId], references: [id])
   cartId                 String?
   Restaurant             Restaurant? @relation(fields: [restaurantId], references: [id])
   restaurantId           String?
   Menu                   Menu?       @relation(fields: [menuId], references: [id])
   menuId                 String?
+  CartItem               CartItem[]
 
   @@map("items")
 }
@@ -61,8 +63,10 @@ model Order {
   user       User     @relation(fields: [userId], references: [id])
   userId     String
   items      Item[]
+  cart       Cart     @relation(fields: [cartId], references: [id])
+  cartId     String
   totalPrice Float
-  status     Status
+  status     Status   @default(PENDING)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -70,15 +74,29 @@ model Order {
 }
 
 model Cart {
-  id         String   @id @default(cuid())
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String
-  items      Item[]
+  id         String     @id @default(cuid())
+  user       User?
+  userId     String?    @unique
+  items      CartItem[]
   totalPrice Float
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  Order      Order[]
 
   @@map("carts")
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  item      Item     @relation(fields: [itemId], references: [id])
+  itemId    String
+  quantity  Int
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  cartId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("cart_items")
 }
 
 model Restaurant {
@@ -86,19 +104,22 @@ model Restaurant {
   name        String
   address     String
   phoneNumber String
+  imagePath   String?
+  image       String?
   menu        Item[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  Menu        Menu[]
+  // Menu        Menu[]
 
   @@map("restaurants")
 }
 
+// To be implemented later or not
 model Menu {
   id           String     @id @default(cuid())
   name         String
   items        Item[]
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  // restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
   restaurantId String
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt

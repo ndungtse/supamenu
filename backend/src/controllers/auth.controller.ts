@@ -15,12 +15,18 @@ AuthRouter.post("/register", async (req, res) => {
     if (!email || !password || !phoneNumber || !fullName)
       return res.status(400).json({ message: "Please fill all fields" });
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
         phoneNumber,
         fullName,
+        cart: {
+          create: {
+            totalPrice: 0,
+          },
+        },
       },
     });
     res
@@ -54,7 +60,7 @@ AuthRouter.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
 
     const token = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, email: user.email, role: user.role },
       process.env.TOKEN_SECRET!
     );
     res

@@ -13,6 +13,7 @@ CREATE TABLE "users" (
     "password" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "cartId" TEXT NOT NULL,
     "role" "Role" NOT NULL DEFAULT 'USER',
     "verified" BOOLEAN NOT NULL DEFAULT false,
     "verificationToken" TEXT,
@@ -25,7 +26,8 @@ CREATE TABLE "items" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "priceInRwf" INTEGER NOT NULL,
-    "filePath" TEXT NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
+    "image" TEXT NOT NULL,
     "imagePath" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "isAvailableForPurchase" BOOLEAN NOT NULL DEFAULT true,
@@ -43,8 +45,9 @@ CREATE TABLE "items" (
 CREATE TABLE "orders" (
     "id" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "cartId" TEXT NOT NULL,
     "totalPrice" DOUBLE PRECISION NOT NULL,
-    "status" "Status" NOT NULL,
+    "status" "Status" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -54,7 +57,7 @@ CREATE TABLE "orders" (
 -- CreateTable
 CREATE TABLE "carts" (
     "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "userId" TEXT,
     "totalPrice" DOUBLE PRECISION NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
@@ -63,11 +66,25 @@ CREATE TABLE "carts" (
 );
 
 -- CreateTable
+CREATE TABLE "cart_items" (
+    "id" TEXT NOT NULL,
+    "itemId" TEXT NOT NULL,
+    "quantity" INTEGER NOT NULL,
+    "cartId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "cart_items_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "restaurants" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "address" TEXT NOT NULL,
     "phoneNumber" TEXT NOT NULL,
+    "imagePath" TEXT,
+    "image" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -95,13 +112,19 @@ CREATE TABLE "_ItemToOrder" (
 CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "users_cartId_key" ON "users"("cartId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "carts_userId_key" ON "carts"("userId");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "_ItemToOrder_AB_unique" ON "_ItemToOrder"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_ItemToOrder_B_index" ON "_ItemToOrder"("B");
 
 -- AddForeignKey
-ALTER TABLE "items" ADD CONSTRAINT "items_cartId_fkey" FOREIGN KEY ("cartId") REFERENCES "carts"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "users" ADD CONSTRAINT "users_cartId_fkey" FOREIGN KEY ("cartId") REFERENCES "carts"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "items" ADD CONSTRAINT "items_restaurantId_fkey" FOREIGN KEY ("restaurantId") REFERENCES "restaurants"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -113,7 +136,13 @@ ALTER TABLE "items" ADD CONSTRAINT "items_menuId_fkey" FOREIGN KEY ("menuId") RE
 ALTER TABLE "orders" ADD CONSTRAINT "orders_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "carts" ADD CONSTRAINT "carts_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "orders" ADD CONSTRAINT "orders_cartId_fkey" FOREIGN KEY ("cartId") REFERENCES "carts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "cart_items" ADD CONSTRAINT "cart_items_itemId_fkey" FOREIGN KEY ("itemId") REFERENCES "items"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "cart_items" ADD CONSTRAINT "cart_items_cartId_fkey" FOREIGN KEY ("cartId") REFERENCES "carts"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "menus" ADD CONSTRAINT "menus_restaurantId_fkey" FOREIGN KEY ("restaurantId") REFERENCES "restaurants"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

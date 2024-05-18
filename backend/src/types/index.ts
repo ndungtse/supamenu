@@ -7,4 +7,5 @@ export interface UserRequest extends Request {
 export interface UserToken {
     id: string;
     email: string;
+    role: string;
 }
