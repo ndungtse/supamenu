@@ -1,8 +1,7 @@
-import { View, Text, StyleSheet } from 'react-native'
-import React from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { StatusBar } from 'expo-status-bar'
 import { Colors } from '@/constants/Colors'
+import { StatusBar } from 'expo-status-bar'
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 
 const AppSplashScreen = () => {
   return (

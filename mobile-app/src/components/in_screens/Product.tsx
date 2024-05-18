@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, Image } from 'react-native'
 import React from 'react'
 import { ThemedText } from '../core/ThemedText'
 
@@ -10,7 +10,9 @@ const Product = ({ item }: Props) => {
     return (
         <View className="p-3 bg-gray-400/10 flex-col rounded-md items-center">
             <View className="w-full h-24 rounded-md overflow-hidden">
-                <View className="bg-gray-300 w-full h-full"></View>
+                <View className="bg-gray-300 w-full h-full">
+                    <Image source={{ uri: item.image }} style={{ width: '100%', height: '100%' }} className=' object-cover' />
+                </View>
             </View>
             <View className="flex-1 ml-3">
                 <ThemedText className="font-bold">{item.name}</ThemedText>

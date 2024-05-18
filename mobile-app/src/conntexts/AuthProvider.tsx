@@ -1,17 +1,20 @@
-import useStorage from "@/hooks/useStorage";
-import { router, usePathname, useSegments } from "expo-router";
-import { createContext, useContext, useEffect, useState } from "react";
-import { Platform } from "react-native";
-import React from 'react'
 import AppSplashScreen from "@/components/shared/AppSplashScreen";
+import useStorage from "@/hooks/useStorage";
+import { getTokenData } from "@/utils";
+import { url } from "@/utils/fetch";
+import axios, { AxiosInstance } from "axios";
+import { router, usePathname, useSegments } from "expo-router";
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { Platform } from "react-native";
 
 interface AuthContextProps {
-    user: any | null;
+    user: User | null;
     setToken: React.Dispatch<React.SetStateAction<string | null>>;
     token: string | null;
     ready: boolean;
     setUser: React.Dispatch<React.SetStateAction<any | null>>;
     getProfile: () => Promise<void>
+    AuthApi?: AxiosInstance ;
 }
 
 const AuthContext = createContext<AuthContextProps>({
@@ -40,12 +43,19 @@ export const whiteList = [
 
 export function AuthProvider(props: AuthProviderProps) {
     const [user, setUser] = useState<any | null>(null);
-    const { getData } = useStorage();
+    const { getData, removeData } = useStorage();
     const [token, setToken] = useState<any>(undefined);
     const [ready, setReady] = useState(false);
     const segments = useSegments();
     const pathname = usePathname();
     const isAuthPage = whiteList.includes(pathname);
+
+    const AuthApi = axios.create({
+        baseURL: url,
+        headers: {
+            Authorization: token
+        },
+    });
 
     const replace = (path: string) => {
         if (Platform.OS === "ios") {
@@ -63,14 +73,16 @@ export function AuthProvider(props: AuthProviderProps) {
         console.log("getting profile", isAuthPage);
         if (isAuthPage) return;
         try {
-            // const id = getTokenData(token as string)?.id;
-            // console.log("id", id);
-            // const res = await api.get(`/user/${id}`);
-            // console.log('proRes', res.data);
-            // const data = res.data.data;
-            // setUser(data);
+            const id = getTokenData(token as string)?.id;
+            console.log("id", id);
+            const res = await AuthApi.get(`/user/me`);
+            console.log('proRes', res.data);
+            const data = res.data.data;
+            setUser(data);
         } catch (error) {
             console.log('error', error);
+            removeData("token");
+            replace("/login");
         } finally {
             setReady(true);
         }
@@ -126,6 +138,7 @@ export function AuthProvider(props: AuthProviderProps) {
                 setToken,
                 ready,
                 getProfile,
+                AuthApi,
             }}
         >
             {ready ? props.children : <AppSplashScreen />}

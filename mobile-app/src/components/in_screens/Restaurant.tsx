@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from 'react-native'
+import { View, Text, Pressable, Image } from 'react-native'
 import React from 'react'
 import { ThemedText } from '../core/ThemedText'
 import { Link, useRouter } from 'expo-router';
@@ -10,10 +10,12 @@ interface RestaurantProps {
 const Restaurant = ({ restaurant }: RestaurantProps) => {
     const router = useRouter();
     return (
-        <Pressable onPress={()=> router.push(`/restaurant/${restaurant.id}`)}>
+        <Pressable onPress={() => router.push(`/restaurant/${restaurant.id}`)}>
             <View className="p-3 bg-gray-400/10 rounded-md flex-1 mt-3 flex-row items-center">
                 <View className="w-24 h-24 rounded-md overflow-hidden">
-                    <View className="bg-gray-300 w-full h-full"></View>
+                    <View className="bg-gray-300 w-full h-full">
+                        <Image source={{ uri: restaurant.image }} style={{ width: '100%', height: '100%' }} className=' object-cover' />
+                    </View>
                 </View>
                 <View className="flex-1 ml-3">
                     <ThemedText className="font-bold">{restaurant.name}</ThemedText>
