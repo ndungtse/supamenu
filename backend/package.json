@@ -1,12 +1,12 @@
 {
-  "name": "express-ultimate-starter",
+  "name": "supamenu-api",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/app.ts --ignore \"*.json\"",
     "start": "node dist/src/app.js",
     "tsc": "tsc",
-    "build": "tsc",
+    "build": "pnpm generate && tsc",
     "preview": "node dist/src/app.js",
     "generate": "prisma generate",
     "swagger": "ts-node swagger.ts",
@@ -26,6 +26,7 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "prisma": "^5.14.0",
+    "swagger-autogen": "^2.23.7",
     "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
@@ -36,7 +37,6 @@
     "@types/node": "^20.12.11",
     "@types/swagger-ui-express": "^4.1.6",
     "nodemon": "^3.1.0",
-    "swagger-autogen": "^2.23.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
