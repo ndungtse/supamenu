@@ -9,7 +9,9 @@ import swaggerFile from "../swagger-output.json";
 dotEnv.config();
 const app = express();
 app.use(express.json()); // To parse the incoming requests with JSON payloads
-app.use(cors());
+app.use(cors({
+  origin: "*",
+}));
 
 app.use(router);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerFile));

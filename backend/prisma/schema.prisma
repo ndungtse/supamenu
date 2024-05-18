@@ -15,7 +15,7 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(cuid()) @map("_id")
+  id          String   @id @default(cuid())
   email       String   @unique
   fullName    String
   phoneNumber String
@@ -23,22 +23,37 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   orders      Order[]
+  Cart        Cart[]
+  role        Role     @default(USER)
+  verified    Boolean  @default(false)
+  verificationToken String?
+
+  @@map("users")
 }
 
 model Item {
-  id                     String   @id @default(uuid())
+  id                     String      @id @default(uuid())
   name                   String
-  priceInCents           Int
+  priceInRwf             Int
   filePath               String
   imagePath              String
   description            String
-  isAvailableForPurchase Boolean  @default(true)
-  createdAt              DateTime @default(now())
-  updatedAt              DateTime @updatedAt
+  isAvailableForPurchase Boolean     @default(true)
+  createdAt              DateTime    @default(now())
+  updatedAt              DateTime    @updatedAt
+  quantityAvailable      Int         @default(1)
   // downloadVerifications  DownloadVerification[]
   // Order                  Order?   @relation(fields: [orderId], references: [id])
   // orderId                String?
   Order                  Order[]
+  Cart                   Cart?       @relation(fields: [cartId], references: [id])
+  cartId                 String?
+  Restaurant             Restaurant? @relation(fields: [restaurantId], references: [id])
+  restaurantId           String?
+  Menu                   Menu?       @relation(fields: [menuId], references: [id])
+  menuId                 String?
+
+  @@map("items")
 }
 
 model Order {
@@ -50,6 +65,45 @@ model Order {
   status     Status
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  @@map("orders")
+}
+
+model Cart {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  items      Item[]
+  totalPrice Float
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("carts")
+}
+
+model Restaurant {
+  id          String   @id @default(cuid())
+  name        String
+  address     String
+  phoneNumber String
+  menu        Item[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  Menu        Menu[]
+
+  @@map("restaurants")
+}
+
+model Menu {
+  id           String     @id @default(cuid())
+  name         String
+  items        Item[]
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@map("menus")
 }
 
 enum Role {
