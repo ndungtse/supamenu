@@ -1,9 +1,9 @@
-interface Timestamps {
+export interface Timestamps {
     createdAt: Date;
     updatedAt: Date;
   }
   
-  interface User extends Timestamps {
+  export interface User extends Timestamps {
     id: string;
     email: string;
     fullName: string;
@@ -17,7 +17,7 @@ interface Timestamps {
     verificationToken?: string;
   }
   
-  interface Item extends Timestamps {
+  export interface Item extends Timestamps {
     id: string;
     name: string;
     priceInRwf: number;
@@ -29,14 +29,14 @@ interface Timestamps {
     quantityAvailable: number;
     Order: Order[];
     cartId?: string;
-    Restaurant?: Restaurant;
+    Restaurant?: IRestaurant;
     restaurantId?: string;
     Menu?: Menu;
     menuId?: string;
     CartItem: CartItem[];
   }
   
-  interface Order extends Timestamps {
+  export interface Order extends Timestamps {
     id: string;
     user: User;
     userId: string;
@@ -47,7 +47,7 @@ interface Timestamps {
     status: Status;
   }
   
-  interface Cart extends Timestamps {
+  export interface Cart extends Timestamps {
     id: string;
     user?: User;
     userId?: string;
@@ -56,7 +56,7 @@ interface Timestamps {
     Order: Order[];
   }
   
-  interface CartItem extends Timestamps {
+  export interface CartItem extends Timestamps {
     id: string;
     item: Item;
     itemId: string;
@@ -65,7 +65,9 @@ interface Timestamps {
     cartId: string;
   }
   
-  interface Restaurant extends Timestamps {
+  export interface IRestaurant extends Timestamps {
+    location: string;
+    rating: number;
     id: string;
     name: string;
     address: string;
@@ -75,7 +77,7 @@ interface Timestamps {
     menu: Item[];
   }
   
-  interface Menu extends Timestamps {
+  export interface Menu extends Timestamps {
     id: string;
     name: string;
     items: Item[];

@@ -1,5 +1,6 @@
 import AppSplashScreen from "@/components/shared/AppSplashScreen";
 import useStorage from "@/hooks/useStorage";
+import { User } from "@/types/schema";
 import { getTokenData } from "@/utils";
 import { url } from "@/utils/fetch";
 import axios, { AxiosInstance } from "axios";

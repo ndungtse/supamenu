@@ -29,7 +29,7 @@ RestRouter.get("/", authMiddleware, async (req: Request, res: Response) => {
   }
 });
 
-RestRouter.get("/:id", authMiddleware, async (req: Request, res: Response) => {
+RestRouter.get("/byId/:id", authMiddleware, async (req: Request, res: Response) => {
   /* #swagger.tags = ['Restaurant'] */
   /* #swagger.security = [{
             "authToken": []
@@ -179,5 +179,42 @@ RestRouter.post(
     }
   }
 );
+
+// get nearby restaurants (which includes the user's location) location is string form query
+RestRouter.get(
+  "/nearby",
+  authMiddleware,
+  async (req: Request, res: Response) => {
+    /* #swagger.tags = ['Restaurant'] */
+    /* #swagger.security = [{
+            "authToken": []
+    }] */
+    try {
+      const location = req.query.location as string;
+      if (!location)
+        return res.status(400).json({ message: "Please provide location" });
+      const restaurants = await prisma.restaurant.findMany({
+        where: {
+          address: {
+            contains: location,
+          },
+        },
+      });
+      res
+        .status(200)
+        .json(
+          new ApiResponse(restaurants, "Restaurants fetched successfully", true)
+        );
+    } catch (error: any) {
+      console.log(error);
+      res
+        .status(500)
+        .json(
+          new ApiResponse(null, "Internal server error", false, error?.message)
+        );
+    }
+  }
+);
+
 
 export default RestRouter;

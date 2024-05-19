@@ -11,6 +11,7 @@ import { AuthProvider } from '@/conntexts/AuthProvider';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeWindStyleSheet } from 'nativewind';
+import AppProvider from '@/conntexts/AppProvider';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -20,7 +21,7 @@ NativeWindStyleSheet.setOutput({
 });
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const { colorScheme } = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -39,19 +40,21 @@ export default function RootLayout() {
   return (
     <AuthProvider>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <SafeAreaView
-          style={{
-            flex: 1,
-            // backgroundColor: colorScheme === 'dark' ? DarkTheme.colors.background : DefaultTheme.colors.background,
-          }}
-          edges={[]}
-        >
-          <Stack screenOptions={{ headerShown: false }} initialRouteName='index'>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            {/* <Stack.Screen options={{ headerShown: false }} name="index" /> */}
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </SafeAreaView>
+        <AppProvider>
+          <SafeAreaView
+            style={{
+              flex: 1,
+              // backgroundColor: colorScheme === 'dark' ? DarkTheme.colors.background : DefaultTheme.colors.background,
+            }}
+            edges={[]}
+          >
+            <Stack screenOptions={{ headerShown: false }} initialRouteName='index'>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              {/* <Stack.Screen options={{ headerShown: false }} name="index" /> */}
+              <Stack.Screen name="+not-found" />
+            </Stack>
+          </SafeAreaView>
+        </AppProvider>
       </ThemeProvider>
     </AuthProvider>
   );
