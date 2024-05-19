@@ -53,6 +53,7 @@ const RegisterScreen = () => {
                             style={{
                                 fontSize: 16,
                             }}
+                            autoCapitalize='none'
                             className=' w-full flex-row items-center outline-none p-2' placeholder='Your Full Names' />
                     </View>
                     <View className='mt-4 flex-row items-center border-2 border-gray-300 p-1 rounded-md'>
@@ -62,6 +63,7 @@ const RegisterScreen = () => {
                             style={{
                                 fontSize: 16,
                             }}
+                            autoCapitalize='none'
                             keyboardType='phone-pad'
                             className=' w-full flex-row items-center outline-none p-2' placeholder='Your Phone Number' />
                     </View>
@@ -72,6 +74,7 @@ const RegisterScreen = () => {
                             style={{
                                 fontSize: 16,
                             }}
+                            autoCapitalize='none'
                             keyboardType='email-address'
                             className=' w-full flex-row items-center outline-none p-2' placeholder='Your Email' />
                     </View>
@@ -83,6 +86,7 @@ const RegisterScreen = () => {
                             style={{
                                 fontSize: 16,
                             }}
+                            autoCapitalize='none'
                             className=' w-full flex-row items-center outline-none p-2' placeholder='Your Password' />
                     </View>
                     <Pressable

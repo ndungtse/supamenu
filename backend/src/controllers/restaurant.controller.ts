@@ -59,70 +59,125 @@ RestRouter.get("/:id", authMiddleware, async (req: Request, res: Response) => {
 });
 
 // create a new restaurant (admin only)
-RestRouter.post("/restaurant/create", checkAdmin, async (req: Request, res: Response) => {
-  /* #swagger.tags = ['Restaurant'] */
-  /* #swagger.security = [{
+RestRouter.post(
+  "/restaurant/create",
+  checkAdmin,
+  async (req: Request, res: Response) => {
+    /* #swagger.tags = ['Restaurant'] */
+    /* #swagger.security = [{
             "authToken": []
     }] */
-  try {
-    const { name, phoneNumber, address, image } = req.body;
-    if (!name || !phoneNumber || !address || !image)
-      return res.status(400).json({ message: "Please fill all fields" });
-    const restaurant = await prisma.restaurant.create({
-      data: {
-        name,
-        phoneNumber,
-        address,
-        image,
-      },
-    });
-    res
-      .status(201)
-      .json(
-        new ApiResponse(restaurant, "Restaurant created successfully", true)
-      );
-  } catch (error: any) {
-    res
-      .status(500)
-      .json(
-        new ApiResponse(null, "Internal server error", false, error?.message)
-      );
+    try {
+      const { name, phoneNumber, address, image } = req.body;
+      if (!name || !phoneNumber || !address || !image)
+        return res.status(400).json({ message: "Please fill all fields" });
+      const restaurant = await prisma.restaurant.create({
+        data: {
+          name,
+          phoneNumber,
+          address,
+          image,
+          rating: req.body.rating || 0,
+        },
+      });
+      res
+        .status(201)
+        .json(
+          new ApiResponse(restaurant, "Restaurant created successfully", true)
+        );
+    } catch (error: any) {
+      res
+        .status(500)
+        .json(
+          new ApiResponse(null, "Internal server error", false, error?.message)
+        );
+    }
   }
-});
+);
 
 //edit restaurant (admin only)
-RestRouter.put("/restaurant/edit/:id", checkAdmin, async (req: Request, res: Response) => {
-  /* #swagger.tags = ['Restaurant'] */
-  /* #swagger.security = [{
+RestRouter.put(
+  "/restaurant/edit/:id",
+  checkAdmin,
+  async (req: Request, res: Response) => {
+    /* #swagger.tags = ['Restaurant'] */
+    /* #swagger.security = [{
             "authToken": []
     }] */
-  try {
-    const { name, phoneNumber, address, image } = req.body;
-    if (!name || !phoneNumber || !address || !image)
-      return res.status(400).json({ message: "Please fill all fields" });
-    const restaurant = await prisma.restaurant.update({
-      where: {
-        id: req.params.id,
-      },
-      data: {
-        name,
-        phoneNumber,
-        address,
-        image,
-      },
-    });
-    res
-      .status(200)
-      .json(
-        new ApiResponse(restaurant, "Restaurant updated successfully", true)
-      );
-  } catch (error: any) {
-    res
-      .status(500)
-      .json(
-        new ApiResponse(null, "Internal server error", false, error?.message)
-      );
+    try {
+      const { name, phoneNumber, address, image } = req.body;
+      if (!name || !phoneNumber || !address || !image)
+        return res.status(400).json({ message: "Please fill all fields" });
+      const restaurant = await prisma.restaurant.update({
+        where: {
+          id: req.params.id,
+        },
+        data: {
+          name,
+          phoneNumber,
+          address,
+          image,
+        },
+      });
+      res
+        .status(200)
+        .json(
+          new ApiResponse(restaurant, "Restaurant updated successfully", true)
+        );
+    } catch (error: any) {
+      res
+        .status(500)
+        .json(
+          new ApiResponse(null, "Internal server error", false, error?.message)
+        );
+    }
   }
-});
+);
+
+// create many restaurants (admin only)
+RestRouter.post(
+  "/restaurant/create/many",
+  checkAdmin,
+  async (req: Request, res: Response) => {
+    /* #swagger.tags = ['Restaurant'] */
+    /* #swagger.security = [{
+            "authToken": []
+          }]
+     */
+    try {
+      const { restaurants } = req.body;
+      if (!restaurants)
+        return res.status(400).json({ message: "Please fill all fields" });
+      const _restaurants = restaurants.map((restaurant: any) => {
+        return {
+          name: restaurant.name,
+          phoneNumber: restaurant.phoneNumber,
+          address: restaurant.address,
+          image: restaurant.image,
+          rating: restaurant.rating || 0,
+        };
+      });
+      const createdRestaurants = await prisma.restaurant.createMany({
+        data: _restaurants,
+      });
+      res
+        .status(201)
+        .json(
+          new ApiResponse(
+            createdRestaurants,
+            "Restaurants created successfully",
+            true
+          )
+        );
+    } catch (error: any) {
+      console.log(error);
+      res
+        .status(500)
+        .json(
+          new ApiResponse(null, "Internal server error", false, error?.message)
+        );
+    }
+  }
+);
 
 export default RestRouter;

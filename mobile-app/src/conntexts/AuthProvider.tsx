@@ -129,6 +129,8 @@ export function AuthProvider(props: AuthProviderProps) {
         }
     }, [token, segments, ready]);
 
+    if (!ready) return <AppSplashScreen />;
+
     return (
         <AuthContext.Provider
             value={{

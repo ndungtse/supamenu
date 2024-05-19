@@ -8,6 +8,7 @@ import { router } from 'expo-router'
 import CustomStatusBar from '@/components/core/CustomStatusBar'
 import { ArrowIcon } from '@/components/icons'
 import { AntDesign } from '@expo/vector-icons'
+import { Colors } from '@/constants/Colors'
 
 const Profile = () => {
     const { user, setToken, setUser } = useAuth()
@@ -23,7 +24,7 @@ const Profile = () => {
     return (
         <>
             <CustomStatusBar />
-            <ThemedView className='flex-1 items-baseline'>
+            <ThemedView className='flex-1 p-2 items-baseline'>
                 <View className="flex flex-row justify-between items-center">
                     <Pressable
                         onPress={() => router.back()}
@@ -37,9 +38,9 @@ const Profile = () => {
                     </View>
                 </View>
                 <ThemedText className='text-lg font-bold mt-3'>Hello, {user?.fullName}</ThemedText>
-                <Pressable onPress={logout} className='bg-gray-400/30 mt-4 items-center flex-row p-3 rounded-md'>
-                    <AntDesign name="logout" size={24} color="white" />
-                    <Text className='text-white text-lg ml-3'>Logout</Text>
+                <Pressable onPress={logout} className=' mt-4 items-center flex-row px-3 py-1 rounded-md'>
+                    <AntDesign name="logout" size={24} color={Colors.primary} />
+                    <Text className='text-primary text-lg ml-3'>Logout</Text>
                 </Pressable>
             </ThemedView></>
     )

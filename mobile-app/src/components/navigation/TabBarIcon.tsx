@@ -1,9 +1,27 @@
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
+import { Colors } from '@/constants/Colors';
+import useColorScheme from '@/hooks/useColorScheme';
+import { cn } from '@/utils/cn';
+import React from 'react';
+import { Platform, View } from 'react-native';
 
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { type IconProps } from '@expo/vector-icons/build/createIconSet';
-import { type ComponentProps } from 'react';
-
-export function TabBarIcon({ style, ...rest }: IconProps<ComponentProps<typeof Ionicons>['name']>) {
-  return <Ionicons size={28} style={[{ marginBottom: -3 }, style]} {...rest} />;
+interface TabBarIconProps {
+  focused: boolean;
+  color?: string;
+  children: React.ReactNode;
 }
+
+const TabBarIcon: React.FC<TabBarIconProps> = ({ focused, color, children }) => {
+  const isIos = Platform.OS === 'ios';
+  const colorScheme = useColorScheme();
+  return (
+    <View className={cn('flex-col relative items-center', isIos ? 'pt-1' : '')}>
+      {focused && <View 
+      style={{ backgroundColor: Colors[colorScheme ?? 'light'].tabBg }}
+        className={cn('w-full  aspect-square -z-5 -top-3 absolute rounded-full')}></View>}
+      {children}
+      {<View className={cn(' w-2 h-2 rounded-full', focused ? 'bg-primary' : 'bg-transparent')}></View>}
+    </View>
+  );
+};
+
+export default TabBarIcon;

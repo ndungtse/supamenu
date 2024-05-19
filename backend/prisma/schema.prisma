@@ -106,6 +106,7 @@ model Restaurant {
   phoneNumber String
   imagePath   String?
   image       String?
+  rating      Float    @default(0)
   menu        Item[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -116,13 +117,13 @@ model Restaurant {
 
 // To be implemented later or not
 model Menu {
-  id           String     @id @default(cuid())
+  id           String   @id @default(cuid())
   name         String
   items        Item[]
   // restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
   restaurantId String
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@map("menus")
 }

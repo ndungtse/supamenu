@@ -2,6 +2,7 @@ import { Router } from "express";
 import prisma from "../config/prisma";
 import ApiResponse from "../utils/ApiResponse";
 import { checkAdmin } from "../middlewares/admin.moddleware";
+import bcrypt from "bcrypt";
 
 const adminRouter = Router();
 
@@ -31,10 +32,11 @@ adminRouter.post("/create-from-token", async (req, res) => {
     const { email, password, phoneNumber, fullName, secret } = req.body;
     if (secret !== process.env.ADMIN_SECRET)
       return res.status(401).json(new ApiResponse(null, "Unauthorized", false));
+    const hashedPassword = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
       data: {
         email,
-        password,
+        password: hashedPassword,
         phoneNumber,
         fullName,
         role: "ADMIN",
@@ -65,10 +67,12 @@ adminRouter.post("/", checkAdmin, async (req, res) => {
     }] */
   try {
     const { email, password, phoneNumber, fullName } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = await prisma.user.create({
       data: {
         email,
-        password,
+        password: hashedPassword,
         phoneNumber,
         fullName,
         role: "ADMIN",

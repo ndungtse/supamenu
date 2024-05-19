@@ -60,6 +60,7 @@ const LoginScreen = () => {
                 fontSize: 16,
               }}
               keyboardType='email-address'
+              autoCapitalize='none'
               placeholderTextColor={'gray'}
               className=' w-full h9 flex-row items-center outline-none p-2'
               placeholder='Your Email' />
@@ -70,6 +71,7 @@ const LoginScreen = () => {
               onChangeText={(text) => setData({ ...data, password: text })}
               placeholderTextColor={'gray'}
               secureTextEntry
+              autoCapitalize='none'
               style={{
                 fontSize: 16,
               }}
