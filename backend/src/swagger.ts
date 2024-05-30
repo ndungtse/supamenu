@@ -4,7 +4,7 @@ import dotEnv from "dotenv";
 
 dotEnv.config();
 const PORT = process.env.PORT || 3000;
-const host = process.env.HOST || "localhost";
+const host = process.env.HOST || `localhost:${PORT}`;
 
 const doc = {
   info: {
@@ -13,7 +13,7 @@ const doc = {
     description:
       "Swagger API documentation for Supa Menu API",
   },
-  host: `${host}:${PORT}`,
+  host: `${host}`,
   basePath: "/",
   schemes: ["http", "https"],
   consumes: ["application/json"],

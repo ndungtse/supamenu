@@ -1,6 +1,7 @@
 import Expandable from '@/components/core/Expandable'
 import { ThemedText } from '@/components/core/ThemedText'
 import { ThemedView } from '@/components/core/ThemedView'
+import PullRefresh from '@/components/core/inputs/PullRefresh'
 import { ArrowIcon } from '@/components/icons'
 import Restaurant from '@/components/in_screens/Restaurant'
 import { useApp } from '@/conntexts/AppProvider'
@@ -63,10 +64,9 @@ const Restaurants = () => {
         </View>
       </View>
       <ScrollView className='flex-col flex-1 '
-        refreshControl={<RefreshControl
+        refreshControl={<PullRefresh
           refreshing={restLoading}
           onRefresh={onRefresh}
-          colors={[Colors.primary]}
         />
         }
       >

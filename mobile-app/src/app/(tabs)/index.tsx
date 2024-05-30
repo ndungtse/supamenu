@@ -2,6 +2,7 @@ import { products } from '@/assets/data';
 import GridView from '@/components/core/GridView';
 import { ThemedText } from '@/components/core/ThemedText';
 import { ThemedView } from '@/components/core/ThemedView';
+import PullRefresh from '@/components/core/inputs/PullRefresh';
 import Product from '@/components/in_screens/Product';
 import Restaurant from '@/components/in_screens/Restaurant';
 import { useApp } from '@/conntexts/AppProvider';
@@ -52,8 +53,7 @@ export default function HomeScreen() {
         </View>
       </ThemedView>
       <ScrollView className="p-3"
-        refreshControl={<RefreshControl
-          colors={[Colors.primary]}
+        refreshControl={<PullRefresh
           refreshing={restLoading}
           onRefresh={onRefresh} />
         }

@@ -11,6 +11,7 @@
     "generate": "prisma generate",
     "swagger": "ts-node swagger.ts",
     "migrate": "prisma migrate dev",
+    "push": "prisma db push",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

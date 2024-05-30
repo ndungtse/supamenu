@@ -82,7 +82,7 @@ export function AuthProvider(props: AuthProviderProps) {
             setUser(data);
         } catch (error) {
             console.log('error', error);
-            removeData("token");
+            await removeData("token");
             replace("/login");
         } finally {
             setReady(true);

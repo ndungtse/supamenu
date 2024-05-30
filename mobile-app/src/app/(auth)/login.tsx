@@ -1,3 +1,4 @@
+import InputText from '@/components/core/inputs/InputText';
 import { useAuth } from '@/conntexts/AuthProvider';
 import useStorage from '@/hooks/useStorage';
 import { api, getResError } from '@/utils/fetch';
@@ -55,26 +56,17 @@ const LoginScreen = () => {
           {error ? <Text className='text-red-500 text-sm text-center'>{error}</Text> : null}
           <View className='mt-8 flex-row items-center border-2 border-gray-300 p-1 rounded-md'>
             <Feather name="mail" size={28} color="gray" />
-            <TextInput onChangeText={(text) => setData({ ...data, email: text })}
-              style={{
-                fontSize: 16,
-              }}
+            <InputText onChangeText={(text) => setData({ ...data, email: text })}
               keyboardType='email-address'
-              autoCapitalize='none'
-              placeholderTextColor={'gray'}
               className=' w-full h9 flex-row items-center outline-none p-2'
+              style={{ color: 'black' }}
               placeholder='Your Email' />
           </View>
           <View className='mt-4 flex-row items-center border-2 border-gray-300 p-1 rounded-md'>
             <Feather name="lock" size={28} color="gray" />
-            <TextInput
+            <InputText
               onChangeText={(text) => setData({ ...data, password: text })}
-              placeholderTextColor={'gray'}
-              secureTextEntry
-              autoCapitalize='none'
-              style={{
-                fontSize: 16,
-              }}
+              type="password"
               className=' w-full flex-row items-center outline-none p-2'
               placeholder='Your Password' />
 
